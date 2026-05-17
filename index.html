@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Nexus Browser - Unrestricted</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Toolbar */
+        .toolbar {
+            background: rgba(255,255,255,0.95);
+            padding: 15px 20px;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .nav-btn {
+            background: #f0f0f0;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            transition: 0.3s;
+        }
+
+        .nav-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .url-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            background: white;
+            border-radius: 50px;
+            padding: 5px 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .url-icon {
+            color: #667eea;
+            margin-right: 10px;
+        }
+
+        #urlBar {
+            flex: 1;
+            padding: 12px 0;
+            border: none;
+            font-size: 15px;
+            outline: none;
+            background: transparent;
+        }
+
+        .badge {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            padding: 8px 18px;
+            border-radius: 50px;
+            color: white;
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        #goBtn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        #goBtn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 5px 20px rgba(102,126,234,0.4);
+        }
+
+        /* Quick Links */
+        .quick-links {
+            background: rgba(255,255,255,0.1);
+            padding: 12px 20px;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            backdrop-filter: blur(5px);
+        }
+
+        .quick-link {
+            background: rgba(255,255,255,0.2);
+            padding: 6px 15px;
+            border-radius: 50px;
+            color: white;
+            text-decoration: none;
+            font-size: 13px;
+            transition: 0.3s;
+        }
+
+        .quick-link:hover {
+            background: white;
+            color: #667eea;
+        }
+
+        /* Info Panel */
+        .info-panel {
+            background: rgba(255,255,255,0.95);
+            margin: 20px;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        .info-panel h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .info-panel p {
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .big-icon {
+            font-size: 60px;
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        .footer {
+            margin-top: auto;
+            text-align: center;
+            padding: 15px;
+            color: rgba(255,255,255,0.7);
+            font-size: 12px;
+        }
+
+        @media (max-width: 768px) {
+            .toolbar { padding: 10px 15px; }
+            .badge span { display: none; }
+            .quick-links { overflow-x: auto; flex-wrap: nowrap; }
+            .info-panel { margin: 15px; padding: 25px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="toolbar">
+    <div>
+        <button class="nav-btn" onclick="goBack()" title="Back">
+            <i class="fas fa-arrow-left"></i>
+        </button>
+        <button class="nav-btn" onclick="goForward()" title="Forward">
+            <i class="fas fa-arrow-right"></i>
+        </button>
+        <button class="nav-btn" onclick="reloadPage()" title="Reload">
+            <i class="fas fa-sync-alt"></i>
+        </button>
+    </div>
+
+    <div class="url-container">
+        <i class="fas fa-link url-icon"></i>
+        <input type="text" id="urlBar" placeholder="Enter website URL... (e.g., youtube.com)">
+    </div>
+
+    <div class="badge">
+        <i class="fas fa-shield-alt"></i>
+        <span> NO RESTRICTIONS</span>
+    </div>
+
+    <button id="goBtn" onclick="navigate()">
+        <i class="fas fa-arrow-right"></i> GO
+    </button>
+</div>
+
+<div class="quick-links">
+    <a href="#" class="quick-link" onclick="quickLink('https://www.google.com')">🔍 Google</a>
+    <a href="#" class="quick-link" onclick="quickLink('https://www.youtube.com')">📺 YouTube</a>
+    <a href="#" class="quick-link" onclick="quickLink('https://www.facebook.com')">📘 Facebook</a>
+    <a href="#" class="quick-link" onclick="quickLink('https://www.instagram.com')">📷 Instagram</a>
+    <a href="#" class="quick-link" onclick="quickLink('https://www.twitter.com')">🐦 Twitter</a>
+    <a href="#" class="quick-link" onclick="quickLink('https://github.com')">💻 GitHub</a>
+    <a href="#" class="quick-link" onclick="quickLink('https://www.wikipedia.org')">📚 Wikipedia</a>
+    <a href="#" class="quick-link" onclick="quickLink('https://www.reddit.com')">🤖 Reddit</a>
+</div>
+
+<div class="info-panel" id="infoPanel">
+    <div class="big-icon">
+        <i class="fas fa-globe"></i>
+    </div>
+    <h2>🌐 Nexus Unrestricted Browser</h2>
+    <p>✅ Enter any website URL in the search bar above</p>
+    <p>🚀 Click GO or press Enter to navigate</p>
+    <p>🔓 No restrictions - All websites are allowed</p>
+    <p>📌 Use Quick Links for popular sites</p>
+    <br>
+    <p style="color: #667eea; font-weight: bold;">👇 Type a URL and press GO 👇</p>
+</div>
+
+<div class="footer">
+    Nexus Browser | Unrestricted Mode | No Security Blocks
+</div>
+
+<script>
+    let historyStack = [];
+    let historyIndex = -1;
+    
+    // Load saved history
+    try {
+        let saved = localStorage.getItem('browser_history');
+        if (saved) {
+            historyStack = JSON.parse(saved);
+            historyIndex = historyStack.length - 1;
+        }
+    } catch(e) {}
+    
+    function saveHistory() {
+        localStorage.setItem('browser_history', JSON.stringify(historyStack));
+    }
+    
+    function navigate(url = null) {
+        let finalUrl = url || document.getElementById('urlBar').value.trim();
+        
+        if (!finalUrl) return;
+        
+        // Add https:// if missing
+        if (!finalUrl.startsWith('http://') && !finalUrl.startsWith('https://')) {
+            if (finalUrl.includes('.')) {
+                finalUrl = 'https://' + finalUrl;
+            } else {
+                finalUrl = 'https://www.google.com/search?q=' + encodeURIComponent(finalUrl);
+            }
+        }
+        
+        // Add to history
+        if (historyStack[historyIndex] !== finalUrl) {
+            historyStack = historyStack.slice(0, historyIndex + 1);
+            historyStack.push(finalUrl);
+            historyIndex++;
+            saveHistory();
+        }
+        
+        // 🔥 DIRECT NAVIGATION - Open in same window!
+        window.location.href = finalUrl;
+    }
+    
+    function quickLink(url) {
+        navigate(url);
+    }
+    
+    function goBack() {
+        if (historyIndex > 0) {
+            historyIndex--;
+            window.location.href = historyStack[historyIndex];
+        }
+    }
+    
+    function goForward() {
+        if (historyIndex < historyStack.length - 1) {
+            historyIndex++;
+            window.location.href = historyStack[historyIndex];
+        }
+    }
+    
+    function reloadPage() {
+        window.location.reload();
+    }
+    
+    // Enter key
+    document.getElementById('urlBar').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') navigate();
+    });
+    
+    // Save current page to history on load
+    let currentPage = window.location.href;
+    if (currentPage !== 'about:blank' && currentPage !== document.getElementById('urlBar')?.value) {
+        if (historyStack[historyIndex] !== currentPage) {
+            historyStack.push(currentPage);
+            historyIndex = historyStack.length - 1;
+            saveHistory();
+        }
+    }
+    
+    // Update URL bar with current page
+    document.getElementById('urlBar').value = window.location.href;
+    
+    // Hide info panel if not on homepage
+    if (window.location.href !== 'https://cietas.page.gd/' && 
+        window.location.href !== 'https://cietas.page.gd/index.html') {
+        document.getElementById('infoPanel').style.display = 'none';
+    }
+    
+    console.log('🚀 Nexus Browser Ready!');
+    console.log('✅ Current URL:', window.location.href);
+</script>
+</body>
+</html>
